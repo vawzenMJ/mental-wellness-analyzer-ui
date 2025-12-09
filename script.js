@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const predictionOutputContainer = document.getElementById('prediction-output-container'); 
     
     // --- Configuration ---
-    // !! IMPORTANT: REPLACE THIS WITH YOUR ACTUAL RENDER URL !!
-    const API_ENDPOINT = 'https://mental-wellness-analyzer.onrender.com/predict';  
+    // The specific Render URL provided by the user
+    const API_ENDPOINT = 'https://mental-wellness-analyzer.onrender.com/predict';  
 
     // Get all recommendation divs
     const highRecommendation = document.getElementById('recommendation-high');
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             predictionOutputContainer.innerHTML = `
                 <div class="error-message">
                     <h2>Analysis Error</h2>
-                    <p>Could not connect to the analysis service. Check the API link or the console for details.</p>
+                    <p>Could not connect to the analysis service. Check the API link or the browser console for details.</p>
                 </div>
             `;
         }
