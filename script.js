@@ -1,70 +1,115 @@
-document.getElementById('analyze-btn').addEventListener('click', async () => {
-    const feelingText = document.getElementById('feeling-text').value;
-    const predictionOutput = document.getElementById('prediction-output');
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('mental-state-form');
+    // Target container for the prediction text output
+    const predictionOutputContainer = document.getElementById('prediction-output-container'); 
     
-    // --- Step 1: Prepare the UI ---
-    // Hide all recommendation sections before starting a new analysis
-    const recommendationSections = document.querySelectorAll('.recommendation');
-    recommendationSections.forEach(el => el.classList.add('hidden'));
+    // --- Configuration ---
+    // !! IMPORTANT: REPLACE THIS WITH YOUR ACTUAL RENDER URL !!
+    const API_ENDPOINT = 'https://mental-wellness-analyzer.onrender.com/predict';  
 
-    if (!feelingText.trim()) {
-        predictionOutput.textContent = 'Please enter how you are feeling.';
-        return;
-    }
+    // Get all recommendation divs
+    const highRecommendation = document.getElementById('recommendation-high');
+    const lowRecommendation = document.getElementById('recommendation-low');
+    const stableRecommendation = document.getElementById('recommendation-stable');
 
-    const API_ENDPOINT = 'https://mental-wellness-analyzer.onrender.com/predict'; 
+    // Function to hide all recommendations and clear output
+    const hideAllRecommendations = () => {
+        highRecommendation.classList.add('hidden');
+        lowRecommendation.classList.add('hidden');
+        stableRecommendation.classList.add('hidden');
+        predictionOutputContainer.innerHTML = ''; 
+    };
 
-    predictionOutput.textContent = 'Analyzing... Please wait.';
+    // Function to display the correct recommendation based on the prediction string
+    const displayRecommendation = (predictionText) => {
+        hideAllRecommendations();
 
-    try {
-        // --- Step 2: Make the API Call ---
-        const response = await fetch(API_ENDPOINT, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ text: feelingText }) 
-        });
+        let recommendationElement = null;
+        let riskLevel = predictionText;
 
-        if (!response.ok) {
-            const errorBody = await response.text(); 
-            throw new Error(`HTTP error! Status: ${response.status}. Response: ${errorBody.substring(0, 100)}...`);
-        }
+        // 1. Populate the analysis result text container
+        predictionOutputContainer.innerHTML = `
+            <div class="analysis-result-box">
+                <h2>✅ Analysis Complete</h2>
+                <p>Your estimated mental state is: <strong>${riskLevel}</strong></p>
+            </div>
+        `;
 
-        const data = await response.json();
+        // 2. The prediction text from the ML model determines the display
+        const text = predictionText.toLowerCase();
         
-        // --- Step 3: Process the Prediction ---
-        let prediction = data.prediction || data.state;
-        
-        if (!prediction) {
-             throw new Error("API response is missing the 'prediction' or 'state' key.");
-        }
-
-        // 1. Convert to lowercase: 'High risk' -> 'high risk'
-        prediction = prediction.toLowerCase(); 
-
-        // 2. Sanitize to get the core state (high, low, stable)
-        // This ensures 'high risk' becomes 'high', 'stable' becomes 'stable', etc.
-        const sanitizedPrediction = prediction.replace(/[^a-z0-9]/g, ' ').trim().split(' ')[0];
-
-        // Display the prediction text using the sanitized prediction for the CSS class
-        predictionOutput.innerHTML = `**Assessment Result:** <span class="state-${sanitizedPrediction}">${prediction.charAt(0).toUpperCase() + prediction.slice(1)}</span>`;
-
-        // --- Step 4: Show the Correct Recommendation ---
-        const recommendationId = `recommendation-${sanitizedPrediction}`;
-        const recommendationElement = document.getElementById(recommendationId);
-        
-        if (recommendationElement) {
-            // Remove the 'hidden' class to make the section visible
-            recommendationElement.classList.remove('hidden');
+        if (text.includes('high risk') || text.includes('severe')) {
+            recommendationElement = highRecommendation;
+        } else if (text.includes('stable') || text.includes('low risk') || text.includes('minimal')) {
+            recommendationElement = lowRecommendation;
         } else {
-            // This error should now only occur if the model returns something completely unexpected (e.g., 'neutral')
-            predictionOutput.innerHTML += `<br><small style="color:red;">Error: Unknown prediction state received: ${prediction}</small>`;
+            // Catches Mild, Moderate, or other intermediate states
+            recommendationElement = stableRecommendation;
+        }
+        
+        // 3. Display the results and scroll to them
+        if (recommendationElement) {
+            recommendationElement.classList.remove('hidden');
+            recommendationElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault(); 
+        
+        hideAllRecommendations();
+        
+        // Show loading message
+        predictionOutputContainer.innerHTML = `
+            <div class="loading-message">
+                <p>Analyzing... Please wait. Connecting to the remote analysis service.</p>
+            </div>
+        `;
+
+        const formData = new FormData(form);
+        const inputData = {};
+
+        // --- Validation and Data Prep ---
+        for (const [key, value] of formData.entries()) {
+            // Basic validation: Ensure all questions are answered
+            if (value === "") {
+                predictionOutputContainer.innerHTML = '<p style="color: red; text-align: center;">Please answer all questions before analyzing.</p>';
+                return;
+            }
+            // Convert to integer as expected by the ML model
+            inputData[key] = parseInt(value, 10);
         }
 
-    } catch (error) {
-        // --- Step 5: Handle Errors ---
-        console.error('Error analyzing mental state:', error);
-        predictionOutput.textContent = 'Error: Could not complete analysis. Check the console for API connection issues or HTTP errors.';
-    }
+        // --- API Call ---
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(inputData),
+            });
+
+            if (!response.ok) {
+                // Handle non-200 responses (e.g., 404, 500)
+                throw new Error(`API call failed with status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            // Assume the API returns the prediction text in a key like 'prediction' or 'state'
+            const resultKey = data.prediction || data.state || 'Unknown State';
+            
+            displayRecommendation(resultKey);
+
+        } catch (error) {
+            console.error('Error fetching prediction:', error);
+            predictionOutputContainer.innerHTML = `
+                <div class="error-message">
+                    <h2>Analysis Error</h2>
+                    <p>Could not connect to the analysis service. Check the API link or the console for details.</p>
+                </div>
+            `;
+        }
+    });
 });

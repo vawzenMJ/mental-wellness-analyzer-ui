@@ -1,141 +1,215 @@
+/* General Setup and Typography */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7f9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6; /* Very light, calming background */
+    color: #333;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .container {
     background-color: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    max-width: 650px;
     width: 100%;
-    max-width: 500px;
-    text-align: center;
+    margin: 20px 0;
 }
 
 h1 {
-    color: #333;
-    margin-bottom: 20px;
+    color: #2c3e50; /* Dark blue/almost black */
+    text-align: center;
+    margin-bottom: 25px;
+    font-weight: 600;
 }
 
-label {
+p {
+    line-height: 1.6;
+}
+
+/* --- Form Elements Styling (Improved Spacing) --- */
+#mental-state-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px; /* Increased gap between question groups for better spacing */
+    margin-bottom: 30px;
+}
+
+.question-group {
+    padding: 18px 20px; /* Increased padding around each question block */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fcfcfc;
+}
+
+.question-group label {
     display: block;
-    text-align: left;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #555;
+    margin-bottom: 12px; /* Added margin below label to separate it clearly from the select box */
+    font-weight: 500;
+    color: #34495e; 
+    font-size: 1.05em; 
 }
 
-textarea {
+select {
     width: 100%;
     padding: 10px;
-    margin-bottom: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    box-sizing: border-box; /* Important for padding/border within width */
-    resize: vertical;
-}
-
-button {
-    background-color: #007bff;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    border-radius: 6px;
+    box-sizing: border-box;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    appearance: none; 
+    background-color: #fff;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2334495e%22%20d%3D%22M287%2069.4a17.6%2017.6%200%2000-13.2-5.6H18.8c-5%200-9.3%201.8-12.9%205.6s-5.3%208.5-5.3%2013.2%201.8%209.3%205.6%2012.9l127.8%20127.9c3.6%203.6%207.8%205.4%2012.9%205.4s9.3-1.8%2012.9-5.4L287%2095.5c3.6-3.6%205.4-7.8%205.4-12.9s-1.8-9.3-5.4-12.9z%22%2F%3E%3C%2Fsvg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 12px;
 }
 
-button:hover {
-    background-color: #0056b3;
+select:focus {
+    border-color: #3498db; 
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
 }
 
-#result-area {
-    margin-top: 20px;
-    padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    min-height: 50px;
-    margin-bottom: 20px; /* Added margin for separation */
+/* Button Styling */
+#analyze-btn {
+    background-color: #2ecc71; 
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    margin-top: 15px; 
 }
 
-#prediction-output {
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #333;
+#analyze-btn:hover {
+    background-color: #27ae60;
 }
 
-/* Prediction Colors */
-.state-high {
-    color: #dc3545; /* Red for high risk */
+#analyze-btn:active {
+    transform: translateY(1px);
 }
 
-.state-low {
-    color: #007bff; /* Blue for low risk */
-}
-
-.state-stable {
-    color: #28a745; /* Green for stable */
-}
-
-/* New Recommendation Section Styles */
-.recommendation {
-    text-align: left;
-    padding: 15px;
+/* New CSS for the dynamically generated result box */
+.analysis-result-box {
+    margin-top: 25px;
+    margin-bottom: 15px;
+    padding: 15px 20px;
     border-radius: 8px;
+    background-color: #ecf0f1; /* Light grey/neutral background */
+    text-align: center;
+    border: 1px solid #bdc3c7;
+}
+
+.analysis-result-box h2 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-size: 1.5em;
+}
+
+.analysis-result-box p {
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.loading-message, .error-message {
+    text-align: center;
+    padding: 15px;
     margin-top: 20px;
-    border: 1px solid #eee; /* Default light border */
-    background-color: #f9f9f9; /* Default light background */
-    transition: all 0.3s ease-in-out;
+    border-radius: 8px;
 }
 
-.recommendation.hidden {
-    display: none; /* Hide by default */
+.error-message {
+    background-color: #fde8e8;
+    color: #e74c3c;
 }
 
-/* Specific Recommendation Styles */
-#recommendation-high {
-    border-color: #dc3545; /* Red border */
-    background-color: #fdd; /* Light red background */
+/* Recommendation Boxes */
+.recommendation {
+    padding: 25px; 
+    margin-top: 25px;
+    border-radius: 8px;
+    border-left: 5px solid;
+    transition: opacity 0.5s ease;
 }
 
-#recommendation-low {
-    border-color: #007bff; /* Blue border */
-    background-color: #e6f2ff; /* Light blue background */
-}
-
-#recommendation-stable {
-    border-color: #28a745; /* Green border */
-    background-color: #dff0d8; /* Light green background */
+.hidden {
+    display: none;
+    opacity: 0;
 }
 
 .recommendation-title {
     margin-top: 0;
-    color: #333;
+    font-weight: 700;
+    font-size: 1.4em;
+    margin-bottom: 10px;
+}
+
+.recommendation-text {
+    margin-bottom: 15px;
+}
+
+.recommendation h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-weight: 600;
 }
 
 .recommendation ul {
-    padding-left: 20px;
     list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 5px;
 }
 
-.recommendation li {
-    margin-bottom: 8px;
-    color: #555;
+/* High Risk (Urgency/Warning) */
+#recommendation-high {
+    background-color: #fde8e8; 
+    border-color: #e74c3c; 
+    color: #c0392b;
 }
 
+#recommendation-high .recommendation-title {
+    color: #e74c3c;
+}
 
+/* Low Risk (Positive/Stable) */
+#recommendation-low {
+    background-color: #e8fde8; 
+    border-color: #2ecc71; 
+    color: #27ae60;
+}
+
+#recommendation-low .recommendation-title {
+    color: #2ecc71;
+}
+
+/* Stable Risk (Neutral/Balanced) */
+#recommendation-stable {
+    background-color: #e8f0fd; 
+    border-color: #3498db; 
+    color: #2980b9;
+}
+
+#recommendation-stable .recommendation-title {
+    color: #3498db;
+}
+
+/* Disclaimer Styling */
 .disclaimer {
-    margin-top: 30px;
     font-size: 0.8em;
-    color: #888;
-    text-align: left;
-    border-top: 1px solid #eee;
+    color: #7f8c8d; 
+    text-align: center;
+    margin-top: 35px;
     padding-top: 15px;
+    border-top: 1px solid #eee;
 }

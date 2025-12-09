@@ -5,46 +5,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mental State Analyzer</title>
-    <link rel="stylesheet" href="stylez.css">
+    <link rel="stylesheet" href="style2.css">
 </head>
 
 <body>
     <div class="container">
         <h1>Mental State Analyzer</h1>
+        <p>Answer the following questions based on how you have been feeling over the **last two weeks**.</p>
 
-        <label for="feeling-text">How are you feeling today?</label>
-        <textarea id="feeling-text" rows="5"
-            placeholder="Describe your feelings, thoughts, or what you've been doing today..."></textarea>
+        <form id="mental-state-form">
 
-        <button id="analyze-btn">Analyze</button>
+            <div class="question-group">
+                <label>1. Little interest or pleasure in doing things?</label>
+                <select name="q1" required>
+                    <option value="" disabled selected>Select an answer</option>
+                    <option value="0">Not at all</option>
+                    <option value="1">Several days</option>
+                    <option value="2">More than half the days</option>
+                    <option value="3">Nearly every day</option>
+                </select>
+            </div>
 
-        <div id="result-area">
-            <p id="prediction-output"></p>
-        </div>
+            <div class="question-group">
+                <label>2. Feeling down, depressed, or hopeless?</label>
+                <select name="q2" required>
+                    <option value="" disabled selected>Select an answer</option>
+                    <option value="0">Not at all</option>
+                    <option value="1">Several days</option>
+                    <option value="2">More than half the days</option>
+                    <option value="3">Nearly every day</option>
+                </select>
+            </div>
+
+            <div class="question-group">
+                <label>3. Trouble falling or staying asleep, or sleeping too much?</label>
+                <select name="q3" required>
+                    <option value="" disabled selected>Select an answer</option>
+                    <option value="0">Not at all</option>
+                    <option value="1">Several days</option>
+                    <option value="2">More than half the days</option>
+                    <option value="3">Nearly every day</option>
+                </select>
+            </div>
+
+            <div class="question-group">
+                <label>4. Thoughts that you would be better off dead, or of hurting yourself?</label>
+                <select name="q4" required>
+                    <option value="" disabled selected>Select an answer</option>
+                    <option value="0">Not at all</option>
+                    <option value="1">Several days</option>
+                    <option value="2">More than half the days</option>
+                    <option value="3">Nearly every day</option>
+                </select>
+            </div>
+
+            <button type="submit" id="analyze-btn">Analyze My State</button>
+
+        </form>
+
+        <div id="prediction-output-container"></div>
 
 
         <div id="recommendation-high" class="recommendation hidden">
             <h3 class="recommendation-title">⚠️ High Risk Assessment: Seek Support</h3>
             <p class="recommendation-text">
-                It's important to reach out for support. Talking to someone can make a significant difference.
+                **Your answers indicate a need for immediate attention.** It's important to reach out for support.
+                Talking to someone can make a significant difference.
                 Consider speaking with a mental health professional.
             </p>
             <h4>Ways to Cope:</h4>
             <ul>
+                <li>**For immediate support, you can reach out to the Kenya Red Cross Society's free counseling hotline
+                    at 1199.**</li>
                 <li>Talk to a trusted friend or family member about how you're feeling.</li>
                 <li>Practice mindfulness or deep-breathing exercises to manage immediate stress.</li>
-                <li>For immediate support, you can reach out to the Kenya Red Cross Society's free counseling hotline
-                    at 1199.</li>
             </ul>
         </div>
 
         <div id="recommendation-low" class="recommendation hidden">
-            <h3 class="recommendation-title">Feeling Low? Nurture Your Well-being</h3>
+            <h3 class="recommendation-title">😊 Great State! Nurture Your Well-being</h3>
             <p class="recommendation-text">
-                It's wonderful that you're feeling well. Keep nurturing your positive mindset and sharing that energy
-                with others.
+                Your results suggest a **very stable mental state**. Keep nurturing your positive mindset and sharing
+                that energy with others.
             </p>
-            <h4>Ways to Cope:</h4>
+            <h4>Ways to Maintain:</h4>
             <ul>
                 <li>Continue your healthy habits and positive routines.</li>
                 <li>Consider starting a gratitude journal to focus on the positives in your life.</li>
@@ -53,16 +97,17 @@
         </div>
 
         <div id="recommendation-stable" class="recommendation hidden">
-            <h3 class="recommendation-title">✨ Stable Mental State: Maintain Balance</h3>
+            <h3 class="recommendation-title">✨ Needs Attention: Maintain Balance</h3>
             <p class="recommendation-text">
-                You're in a balanced state, which is great. Maintaining this equilibrium is key to long-term mental
-                wellness.
+                Your results suggest you may be in a state where a **few areas need attention**. Maintaining a healthy
+                equilibrium is key to long-term mental wellness.
             </p>
             <h4>Ways to Cope:</h4>
             <ul>
                 <li>Engage in regular physical activity to boost your mood.</li>
                 <li>Ensure you are getting enough sleep and maintaining a balanced diet.</li>
                 <li>Continue to engage in hobbies and activities you enjoy.</li>
+                <li>If symptoms persist, consider a consultation with a professional.</li>
             </ul>
         </div>
 
@@ -73,7 +118,7 @@
         </p>
     </div>
 
-    <script src="scripts.js"></script>
+    <script src="script2.js"></script>
 </body>
 
 </html>
