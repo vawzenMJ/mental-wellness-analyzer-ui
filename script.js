@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- Configuration ---
     // The specific Render URL provided by the user
-    const API_ENDPOINT = 'https://mental-wellness-analyzer.onrender.com/predict;'
+    const API_ENDPOINT = 'https://mental-wellness-analyzer.onrender.com/predict';
 
     // Get all recommendation divs
     const highRecommendation = document.getElementById('recommendation-high');
